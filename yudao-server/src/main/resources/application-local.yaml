@@ -250,7 +250,7 @@ yudao:
     camera:
       stream-service-base-url: http://127.0.0.1:18080
       stream-service-token: dev-internal-token
-      hls-public-base-utl: http://127.0.0.1:18080/hls
+      hls-public-base-url: http://127.0.0.1:18080/hls
 
 justauth:
   enabled: true

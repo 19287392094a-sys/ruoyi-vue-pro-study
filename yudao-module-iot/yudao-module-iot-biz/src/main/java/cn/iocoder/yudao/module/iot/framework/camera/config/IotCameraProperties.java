@@ -42,4 +42,15 @@ public class IotCameraProperties {
      */
     private String recordRootPath = "/data/camera-records";
 
+    /**
+     * 流服务基础地址
+     */
+    private String streamServiceBaseUrl = "http://127.0.0.1:18080";
+
+    /**
+     * 流服务验证
+     */
+    private String streamServiceToken = "dev-internal-token";
+
+
 }
