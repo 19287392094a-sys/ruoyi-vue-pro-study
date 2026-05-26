@@ -59,4 +59,24 @@ public interface CameraDeviceService {
      */
     PageResult<CameraDeviceDO> getCameraDevicePage(CameraDevicePageReqVO pageReqVO);
 
+    /**
+     * 启动摄像头实时流
+     * @param cameraId 摄像头设备ID
+     * @return 实时流启动结果，包括摄像头编码，流状态，FFmpeg进程ID，播放地址
+     */
+    CameraStreamClient.StreamStartRespDTO startStream(Long cameraId);
+
+    /**
+     * 停止摄像头实时流
+     * @param cameraId 摄像头设备ID
+     * @return 是否停止成功
+     */
+    Boolean stopStream(Long cameraId);
+
+    /**
+     * 查询摄像头实时状态
+     * @param cameraId 摄像头设备Id
+     * @return 实时流状态，包括摄像头编码，流状态，FFmpeg进程ID，启动时间，停止时间，最近错误信息
+     */
+    CameraStreamClient.StreamStatusRespDTO getStreamStatus(Long cameraId);
 }

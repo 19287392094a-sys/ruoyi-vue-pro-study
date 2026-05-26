@@ -28,6 +28,7 @@ import static cn.iocoder.yudao.framework.apilog.core.enums.OperateTypeEnum.*;
 import cn.iocoder.yudao.module.iot.controller.admin.camera.vo.*;
 import cn.iocoder.yudao.module.iot.dal.dataobject.camera.CameraDeviceDO;
 import cn.iocoder.yudao.module.iot.service.camera.CameraDeviceService;
+import cn.iocoder.yudao.module.iot.service.camera.CameraStreamClient;
 
 @Tag(name = "管理后台 - 摄像头设备")
 @RestController
@@ -99,6 +100,14 @@ public class CameraDeviceController {
         // 导出 Excel
         ExcelUtils.write(response, "摄像头设备.xls", "数据", CameraDeviceRespVO.class,
                         BeanUtils.toBean(list, CameraDeviceRespVO.class));
+    }
+
+    @PostMapping("/stream/start")
+    @Operation(summary = "启动摄像头实时流")
+    @Parameter(name = "id",description = "摄像头设备 ID",required = true)
+    @PreAuthorize("@ss.hasPermission('iot:camera-device:query')")
+    public CommonResult<CameraStreamClient.StreamStartRespDTO> startStream(@RequestParam("id") Long id){
+        return success(cameraDeviceService.startStream(id));
     }
 
 }

@@ -30,6 +30,9 @@ import static cn.iocoder.yudao.module.iot.enums.ErrorCodeConstants.*;
 public class CameraDeviceServiceImpl implements CameraDeviceService {
 
     @Resource
+    private CameraStreamClient cameraStreamClient;
+
+    @Resource
     private CameraDeviceMapper cameraDeviceMapper;
 
     @Override
@@ -67,9 +70,7 @@ public class CameraDeviceServiceImpl implements CameraDeviceService {
 
 
     private void validateCameraDeviceExists(Long id) {
-        if (cameraDeviceMapper.selectById(id) == null) {
-            throw exception(CAMERA_DEVICE_NOT_EXISTS);
-        }
+        validateAndGetCameraDevice(id);
     }
 
     @Override
@@ -80,6 +81,32 @@ public class CameraDeviceServiceImpl implements CameraDeviceService {
     @Override
     public PageResult<CameraDeviceDO> getCameraDevicePage(CameraDevicePageReqVO pageReqVO) {
         return cameraDeviceMapper.selectPage(pageReqVO);
+    }
+
+    @Override
+    public CameraStreamClient.StreamStartRespDTO startStream(Long cameraId){
+        CameraDeviceDO cameraDeviceDO = validateAndGetCameraDevice(cameraId);
+        return cameraStreamClient.startStream(cameraDeviceDO.getCode(),cameraDeviceDO.getRtspUrl(),false);
+    }
+
+    @Override
+    public Boolean stopStream(Long cameraId) {
+        CameraDeviceDO cameraDeviceDO = validateAndGetCameraDevice(cameraId);
+        return cameraStreamClient.stopStream(cameraDeviceDO.getCode());
+    }
+
+    @Override
+    public CameraStreamClient.StreamStatusRespDTO getStreamStatus(Long cameraId) {
+        CameraDeviceDO cameraDeviceDO = validateAndGetCameraDevice(cameraId);
+        return cameraStreamClient.getStreamStatus(cameraDeviceDO.getCode());
+    }
+
+    private CameraDeviceDO validateAndGetCameraDevice(Long id){
+        CameraDeviceDO cameraDeviceDO = cameraDeviceMapper.selectById(id);
+        if(cameraDeviceDO == null){
+            throw exception(CAMERA_DEVICE_NOT_EXISTS);
+        }
+        return cameraDeviceDO;
     }
 
 }
