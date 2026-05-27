@@ -52,5 +52,13 @@ public class IotCameraProperties {
      */
     private String streamServiceToken = "dev-internal-token";
 
+    /**
+     * HLS 文件输出目录
+     */
+    private String hlsRootPath = "./tmp/camera-hls";
 
+    /**
+     * FFmpeg 可执行文件路径
+     */
+    private String ffmpegPath = "ffmpeg";
 }

@@ -248,9 +248,11 @@ yudao:
   tencent-lbs-key: TVDBZ-TDILD-4ON4B-PFDZA-RNLKH-VVF6E # QQ 地图的密钥 https://lbs.qq.com/service/staticV2/staticGuide/staticDoc
   iot:
     camera:
-      stream-service-base-url: http://127.0.0.1:18080
+      stream-service-base-url: http://127.0.0.1:${server.port}
       stream-service-token: dev-internal-token
-      hls-public-base-url: http://127.0.0.1:18080/hls
+      hls-public-base-url: http://127.0.0.1:${server.port}/hls
+      hls-root-path: E:/idea/ruoyi-vue-pro-master/tmp/camera-hls
+      ffmpeg-path: ffmpeg
 
 justauth:
   enabled: true

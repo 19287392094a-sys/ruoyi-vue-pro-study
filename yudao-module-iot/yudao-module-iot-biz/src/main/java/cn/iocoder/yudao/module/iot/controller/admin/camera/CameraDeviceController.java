@@ -110,4 +110,19 @@ public class CameraDeviceController {
         return success(cameraDeviceService.startStream(id));
     }
 
+    @PostMapping("/stream/stop")
+    @Operation(summary = "停止摄像头实时流")
+    @Parameter(name = "id",description = "摄像头设备 ID",required = true)
+    @PreAuthorize("@ss.hasPermission('iot:camera-device:query')")
+    public CommonResult<Boolean> stopStream(@RequestParam("id") Long id){
+        return success(cameraDeviceService.stopStream(id));
+    }
+
+    @GetMapping("/stream/status")
+    @Operation(summary = "查询摄像头实时流状态")
+    @Parameter(name = "id", description = "摄像头设备 ID", required = true)
+    @PreAuthorize("@ss.hasPermission('iot:camera-device:query')")
+    public CommonResult<CameraStreamClient.StreamStatusRespDTO> getStreamStatus(@RequestParam("id") Long id){
+        return success(cameraDeviceService.getStreamStatus(id));
+    }
 }
