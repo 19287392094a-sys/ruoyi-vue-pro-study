@@ -71,7 +71,7 @@ spring:
           password: 123456
         tdengine: # IoT 数据库（需要 IoT 物联网再开启噢！）
           lazy: true # 开启懒加载，保证启动速度
-          url: jdbc:TAOS-WS://192.168.1.42git status:6041/ruoyi_vue_pro?varcharAsString=true
+          url: jdbc:TAOS-WS://192.168.1.42:6041/ruoyi_vue_pro?varcharAsString=true
           driver-class-name: com.taosdata.jdbc.ws.WebSocketDriver
           username: root
           password: taosdata
@@ -252,7 +252,7 @@ yudao:
       stream-service-token: dev-internal-token
       hls-public-base-url: http://127.0.0.1:${server.port}/hls
       hls-root-path: E:/idea/ruoyi-vue-pro-master/tmp/camera-hls
-      ffmpeg-path: ffmpeg
+      ffmpeg-path: E:/xiao/files/camera/ffmpeg-8.1.1-essentials_build/bin/ffmpeg.exe
 
 justauth:
   enabled: true
