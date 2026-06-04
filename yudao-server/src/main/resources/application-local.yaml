@@ -253,6 +253,7 @@ yudao:
       hls-public-base-url: http://127.0.0.1:${server.port}/hls
       hls-root-path: E:/idea/ruoyi-vue-pro-master/tmp/camera-hls
       ffmpeg-path: E:/xiao/files/camera/ffmpeg-8.1.1-essentials_build/bin/ffmpeg.exe
+      record-root-path: E:/camera-records
 
 justauth:
   enabled: true

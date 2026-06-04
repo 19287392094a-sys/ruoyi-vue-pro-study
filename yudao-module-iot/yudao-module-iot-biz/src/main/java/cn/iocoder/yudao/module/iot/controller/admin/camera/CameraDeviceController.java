@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.iot.controller.admin.camera;
 
+import cn.iocoder.yudao.module.iot.service.camera.CameraDeviceRecordService;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -38,6 +39,9 @@ public class CameraDeviceController {
 
     @Resource
     private CameraDeviceService cameraDeviceService;
+
+    @Resource
+    private CameraDeviceRecordService cameraDeviceRecordService;
 
     @PostMapping("/create")
     @Operation(summary = "创建摄像头设备")
@@ -124,5 +128,13 @@ public class CameraDeviceController {
     @PreAuthorize("@ss.hasPermission('iot:camera-device:query')")
     public CommonResult<CameraStreamClient.StreamStatusRespDTO> getStreamStatus(@RequestParam("id") Long id){
         return success(cameraDeviceService.getStreamStatus(id));
+    }
+
+    @PostMapping("/record/start")
+    @Operation(summary = "开始摄像头录像")
+    @Parameter(name = "id", description = "摄像头设备 ID", required = true)
+    @PreAuthorize("@ss.hasPermission('iot:camera-device:query')")
+    public CommonResult<Long> startRecord(@RequestParam("id") Long id) {
+        return success(cameraDeviceRecordService.startRecord(id));
     }
 }
