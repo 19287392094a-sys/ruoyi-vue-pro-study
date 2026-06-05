@@ -137,4 +137,13 @@ public class CameraDeviceController {
     public CommonResult<Long> startRecord(@RequestParam("id") Long id) {
         return success(cameraDeviceRecordService.startRecord(id));
     }
+
+    @PostMapping("/record/stop")
+    @Operation(summary = "停止摄像头录像")
+    @Parameter(name = "id", description = "摄像头设备 ID", required = true)
+    @PreAuthorize("@ss.hasPermission('iot:camera-device:query')")
+    public CommonResult<Boolean> stopRecord(@RequestParam("id") Long id) {
+        cameraDeviceRecordService.stopRecord(id);
+        return success(true);
+    }
 }

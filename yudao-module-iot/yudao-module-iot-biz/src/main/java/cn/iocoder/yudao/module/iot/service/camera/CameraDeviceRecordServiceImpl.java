@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+
 @Service
 public class CameraDeviceRecordServiceImpl implements CameraDeviceRecordService{
 
@@ -74,6 +75,48 @@ public class CameraDeviceRecordServiceImpl implements CameraDeviceRecordService{
             throw new IllegalStateException("启动录像失败：" + ex.getMessage(), ex);
         }
 
+    }
+
+    @Override
+    public void stopRecord(Long cameraId) {
+        Process process = recordProcessMap.remove(cameraId);
+        if (process == null) {
+            throw new IllegalStateException("摄像头未在录像中");
+        }
+
+        if (process.isAlive()) {
+            process.destroy();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            if (process.isAlive()) {
+                process.destroyForcibly();
+            }
+        }
+
+        IotCameraRecordDO record = cameraRecordMapper.selectRecordingByCameraId(cameraId);
+        if (record == null) {
+            throw new IllegalStateException("未找到录制中的录像记录");
+        }
+
+        LocalDateTime endTime = LocalDateTime.now();
+        record.setEndTime(endTime);
+        record.setStatus(STATUS_FINISHED);
+
+        if (record.getStartTime() != null) {
+            record.setDuration((int) java.time.Duration.between(record.getStartTime(), endTime).getSeconds());
+        }
+
+        if (record.getFilePath() != null) {
+            File file = new File(record.getFilePath());
+            if (file.exists()) {
+                record.setFileSize(file.length());
+            }
+        }
+
+        cameraRecordMapper.updateById(record);
     }
 
     private String buildRecordFilePath(CameraDeviceDO camera) {

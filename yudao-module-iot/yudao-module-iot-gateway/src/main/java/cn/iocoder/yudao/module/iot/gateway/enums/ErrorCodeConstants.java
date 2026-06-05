@@ -16,4 +16,6 @@ public interface ErrorCodeConstants {
     // ========== 设备信息 1-050-002-000 ============
     ErrorCode DEVICE_NOT_EXISTS = new ErrorCode(1_051_002_001, "设备({}/{}) 不存在");
 
+
+
 }

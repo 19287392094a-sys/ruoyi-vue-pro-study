@@ -104,4 +104,6 @@ public interface ErrorCodeConstants {
 
     // ========== 摄像头设备 1-050-015-000 ==========
     ErrorCode CAMERA_DEVICE_NOT_EXISTS = new ErrorCode(1_050_015_000, "摄像头设备不存在");
+    ErrorCode CAMERA_RECORD_NOT_EXISTS = new ErrorCode(1_050_015_100, "摄像头录像记录不存在");
+    ErrorCode CAMERA_RECORD_FILE_NOT_EXISTS = new ErrorCode(1_050_015_101,"摄像头录像文件不存在");
 }
