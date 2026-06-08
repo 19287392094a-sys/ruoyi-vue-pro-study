@@ -85,12 +85,17 @@ public class CameraDeviceRecordServiceImpl implements CameraDeviceRecordService{
         }
 
         if (process.isAlive()) {
-            process.destroy();
             try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+                process.getOutputStream().write("q\n".getBytes());
+                process.getOutputStream().flush();
+
+                if (!process.waitFor(10, java.util.concurrent.TimeUnit.SECONDS)) {
+                    process.destroy();
+                }
+            } catch (Exception e) {
+                process.destroy();
             }
+
             if (process.isAlive()) {
                 process.destroyForcibly();
             }
