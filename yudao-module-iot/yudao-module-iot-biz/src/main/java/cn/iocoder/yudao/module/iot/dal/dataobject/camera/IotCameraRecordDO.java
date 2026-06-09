@@ -68,4 +68,19 @@ public class IotCameraRecordDO extends TenantBaseDO {
      */
     private String errorMsg;
 
+    /**
+     * 上传状态：0未上传 1上传成功 2上传失败
+     */
+    private Integer uploadStatus;
+
+    /**
+     * 上传完成时间
+     */
+    private LocalDateTime uploadTime;
+
+    /**
+     * 上传失败原因
+     */
+    private String uploadErrorMsg;
+
 }

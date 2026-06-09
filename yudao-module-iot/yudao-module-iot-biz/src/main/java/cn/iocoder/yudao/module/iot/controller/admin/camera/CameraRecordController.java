@@ -23,7 +23,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -31,7 +30,7 @@ import java.io.RandomAccessFile;
 
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 
-@Tag(name = "管理后台 - IoT 摄像头录像")
+@Tag(name = "Admin - IoT camera record")
 @RestController
 @RequestMapping("/iot/camera-record")
 @Validated
@@ -43,7 +42,7 @@ public class CameraRecordController {
     private CameraRecordService cameraRecordService;
 
     @GetMapping("/page")
-    @Operation(summary = "获得摄像头录像分页")
+    @Operation(summary = "Get camera record page")
     @PreAuthorize("@ss.hasPermission('iot:camera-record:query')")
     public CommonResult<PageResult<IotCameraRecordRespVO>> getCameraRecordPage(
             @Valid IotCameraRecordPageReqVO pageReqVO) {
@@ -52,16 +51,16 @@ public class CameraRecordController {
     }
 
     @GetMapping("/play-url")
-    @Operation(summary = "获得摄像头录像播放地址")
-    @Parameter(name = "id", description = "录像编号", required = true, example = "1")
+    @Operation(summary = "Get camera record playback URL")
+    @Parameter(name = "id", description = "Record id", required = true, example = "1")
     @PreAuthorize("@ss.hasPermission('iot:camera-record:query')")
     public CommonResult<IotCameraRecordPlayUrlRespVO> getCameraRecordPlayUrl(@RequestParam("id") Long id) {
         return success(cameraRecordService.getCameraRecordPlayUrl(id));
     }
 
     @GetMapping("/file")
-    @Operation(summary = "访问摄像头录像文件")
-    @Parameter(name = "id", description = "录像编号", required = true, example = "1")
+    @Operation(summary = "Access camera record file")
+    @Parameter(name = "id", description = "Record id", required = true, example = "1")
     @PreAuthorize("@ss.hasPermission('iot:camera-record:query')")
     public void getCameraRecordFile(@RequestParam("id") Long id,
                                     HttpServletRequest request,

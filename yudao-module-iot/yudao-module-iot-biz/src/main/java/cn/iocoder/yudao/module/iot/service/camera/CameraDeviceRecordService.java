@@ -4,4 +4,8 @@ public interface CameraDeviceRecordService {
     Long startRecord(Long cameraId);
 
     void stopRecord(Long cameraId);
+
+    Long recordSegment(Long cameraId, Integer durationSeconds);
+
+    void stopAllRecords();
 }

@@ -61,4 +61,30 @@ public class IotCameraProperties {
      * FFmpeg 可执行文件路径
      */
     private String ffmpegPath = "ffmpeg";
+
+    /**
+     * 是否启用自动录像
+     */
+    private Boolean autoRecordEnabled = false;
+
+    /**
+     * 项目启动后延迟多少秒开始自动录像
+     */
+    private Integer autoRecordInitialDelaySeconds = 10;
+
+    /**
+     * 自动录像调度间隔，单位：秒
+     */
+    private Integer recordIntervalSeconds = 300;
+
+
+    /**
+     * 每段录像时长，单位：秒
+     */
+    private Integer recordDurationSeconds = 300;
+
+    /**
+     * 自动录像线程池大小
+     */
+    private Integer recordThreadPoolSize = 2;
 }

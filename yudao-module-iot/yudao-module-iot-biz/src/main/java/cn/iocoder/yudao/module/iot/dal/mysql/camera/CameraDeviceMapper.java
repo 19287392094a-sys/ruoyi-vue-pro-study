@@ -29,4 +29,12 @@ public interface CameraDeviceMapper extends BaseMapperX<CameraDeviceDO> {
                 .orderByDesc(CameraDeviceDO::getId));
     }
 
+    default List<CameraDeviceDO> selectAutoRecordEnabledList() {
+        return selectList(new LambdaQueryWrapperX<CameraDeviceDO>()
+                .eq(CameraDeviceDO::getRecordEnabled, true)
+                .eq(CameraDeviceDO::getStatus, 0)
+                .isNotNull(CameraDeviceDO::getRtspUrl)
+                .orderByAsc(CameraDeviceDO::getId));
+    }
+
 }

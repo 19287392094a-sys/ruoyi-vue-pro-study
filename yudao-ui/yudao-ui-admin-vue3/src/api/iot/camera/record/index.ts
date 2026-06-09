@@ -7,12 +7,15 @@ export interface IotCameraRecordVO {
   deptId: number
   startTime: string | number
   endTime?: string | number
-  filePath: string
+  filePath?: string
   fileUrl?: string
   fileSize?: number
   duration?: number
   status: number
   errorMsg?: string
+  uploadStatus?: number
+  uploadTime?: string | number
+  uploadErrorMsg?: string
   createTime: string | number
 }
 
@@ -22,6 +25,9 @@ export interface IotCameraRecordPlayUrlRespVO {
   playUrl: string
   fileUrl?: string
   status: number
+  uploadStatus?: number
+  uploadTime?: string | number
+  uploadErrorMsg?: string
 }
 
 export interface CameraDeviceVO {
@@ -29,6 +35,13 @@ export interface CameraDeviceVO {
   code: string
   name: string
   deptId?: number
+}
+
+const normalizeRecordFileUrl = (fileUrl: string) => {
+  if (fileUrl.startsWith('/admin-api')) {
+    return fileUrl.substring('/admin-api'.length)
+  }
+  return fileUrl
 }
 
 export const IotCameraRecordApi = {
@@ -40,8 +53,8 @@ export const IotCameraRecordApi = {
     return await request.get({ url: '/iot/camera-record/play-url?id=' + id })
   },
 
-  getRecordFile: async (id: number) => {
-    return await request.download({ url: '/iot/camera-record/file?id=' + id })
+  downloadRecordFile: async (fileUrl: string) => {
+    return await request.download({ url: normalizeRecordFileUrl(fileUrl) })
   }
 }
 

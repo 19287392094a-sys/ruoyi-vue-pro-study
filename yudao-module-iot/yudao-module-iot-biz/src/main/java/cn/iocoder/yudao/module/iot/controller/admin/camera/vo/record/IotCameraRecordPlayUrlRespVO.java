@@ -4,24 +4,35 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-@Schema(description = "管理后台 - IoT 摄像头录像播放地址 Response VO")
+import java.time.LocalDateTime;
+
+@Schema(description = "Admin - IoT camera record playback URL response")
 @Data
 @Accessors(chain = true)
 public class IotCameraRecordPlayUrlRespVO {
 
-    @Schema(description = "录像编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "Record id", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     private Long recordId;
 
-    @Schema(description = "摄像头编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "Camera id", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     private Long cameraId;
 
-    @Schema(description = "播放地址")
+    @Schema(description = "Playback URL")
     private String playUrl;
 
-    @Schema(description = "文件地址")
+    @Schema(description = "File URL")
     private String fileUrl;
 
-    @Schema(description = "录像状态", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "Record status", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     private Integer status;
+
+    @Schema(description = "Upload status: 0 pending, 1 success, 2 failed")
+    private Integer uploadStatus;
+
+    @Schema(description = "Upload finished time")
+    private LocalDateTime uploadTime;
+
+    @Schema(description = "Upload failure reason")
+    private String uploadErrorMsg;
 
 }

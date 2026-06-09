@@ -25,6 +25,9 @@ public class CameraRecordServiceImpl implements CameraRecordService{
     @Resource
     private IotCameraRecordMapper cameraRecordMapper;
 
+    @Resource
+    private CameraRecordStorageService cameraRecordStorageService;
+
     @Override
     public PageResult<IotCameraRecordDO> getCameraRecordPage(IotCameraRecordPageReqVO pageReqVO) {
         return cameraRecordMapper.selectPage(pageReqVO);
@@ -36,7 +39,7 @@ public class CameraRecordServiceImpl implements CameraRecordService{
 
         String playUrl = StrUtil.blankToDefault(
                 record.getFileUrl(),
-                "/admin-api/iot/camera-record/file?id=" + id
+                cameraRecordStorageService.buildFileUrl(record)
         );
 
         return new IotCameraRecordPlayUrlRespVO()
@@ -44,7 +47,10 @@ public class CameraRecordServiceImpl implements CameraRecordService{
                 .setCameraId(record.getCameraId())
                 .setPlayUrl(playUrl)
                 .setFileUrl(record.getFileUrl())
-                .setStatus(record.getStatus());
+                .setStatus(record.getStatus())
+                .setUploadStatus(record.getUploadStatus())
+                .setUploadTime(record.getUploadTime())
+                .setUploadErrorMsg(record.getUploadErrorMsg());
     }
 
     @Override

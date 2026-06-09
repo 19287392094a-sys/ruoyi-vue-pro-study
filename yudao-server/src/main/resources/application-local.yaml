@@ -254,6 +254,11 @@ yudao:
       hls-root-path: E:/idea/ruoyi-vue-pro-master/tmp/camera-hls
       ffmpeg-path: E:/xiao/files/camera/ffmpeg-8.1.1-essentials_build/bin/ffmpeg.exe
       record-root-path: E:/camera-records
+      auto-record-enabled: true
+      auto-record-initial-delay-seconds: 10
+      record-interval-seconds: 300
+      record-duration-seconds: 300
+      record-thread-pool-size: 2
 
 justauth:
   enabled: true

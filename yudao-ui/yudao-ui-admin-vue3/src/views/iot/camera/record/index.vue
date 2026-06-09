@@ -86,10 +86,17 @@
           {{ formatFileSize(row.fileSize) }}
         </template>
       </el-table-column>
-      <el-table-column label="状态" prop="status" align="center" width="100">
+      <el-table-column label="录像状态" prop="status" align="center" width="100">
         <template #default="{ row }">
           <el-tag :type="getStatusTagType(row.status)">
             {{ getStatusText(row.status) }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="上传状态" prop="uploadStatus" align="center" width="110">
+        <template #default="{ row }">
+          <el-tag :type="getUploadStatusTagType(row.uploadStatus)">
+            {{ getUploadStatusText(row.uploadStatus) }}
           </el-tag>
         </template>
       </el-table-column>
@@ -99,7 +106,7 @@
           <el-button
             link
             type="primary"
-            :disabled="row.status !== 1 || !row.fileSize"
+            :disabled="!canPlay(row)"
             @click="handlePlay(row)"
           >
             播放
@@ -128,6 +135,7 @@ import {
   CameraDeviceApi,
   CameraDeviceVO,
   IotCameraRecordApi,
+  IotCameraRecordPlayUrlRespVO,
   IotCameraRecordVO
 } from '@/api/iot/camera/record'
 
@@ -184,22 +192,49 @@ const resetQuery = () => {
 
 const handlePlay = async (row: IotCameraRecordVO) => {
   try {
-    await IotCameraRecordApi.getRecordPlayUrl(row.id)
-    const blob = await IotCameraRecordApi.getRecordFile(row.id)
+    const data = await IotCameraRecordApi.getRecordPlayUrl(row.id)
+    const playData = unwrapResponse<IotCameraRecordPlayUrlRespVO>(data)
+    const playUrl = playData?.playUrl || playData?.fileUrl || row.fileUrl
+
+    if (!playUrl) {
+      message.error('录像播放地址为空')
+      return
+    }
 
     closePlayer()
-    videoUrl.value = URL.createObjectURL(blob)
+    videoUrl.value = await resolveVideoUrl(playUrl)
     playDialogVisible.value = true
   } catch {
     message.error('录像加载失败')
   }
 }
 
-const closePlayer = () => {
-  if (videoUrl.value) {
-    URL.revokeObjectURL(videoUrl.value)
-    videoUrl.value = ''
+const resolveVideoUrl = async (fileUrl: string) => {
+  if (isHttpUrl(fileUrl)) {
+    return fileUrl
   }
+
+  const blob = await IotCameraRecordApi.downloadRecordFile(fileUrl)
+  return URL.createObjectURL(blob)
+}
+
+const unwrapResponse = <T>(data: T | { data?: T }): T => {
+  return ((data as any)?.data || data) as T
+}
+
+const isHttpUrl = (url: string) => {
+  return /^https?:\/\//i.test(url)
+}
+
+const canPlay = (row: IotCameraRecordVO) => {
+  return row.status === 1 && !!row.fileSize && (row.uploadStatus == null || row.uploadStatus === 1)
+}
+
+const closePlayer = () => {
+  if (videoUrl.value.startsWith('blob:')) {
+    URL.revokeObjectURL(videoUrl.value)
+  }
+  videoUrl.value = ''
 }
 
 const getStatusText = (status: number) => {
@@ -210,6 +245,21 @@ const getStatusText = (status: number) => {
 }
 
 const getStatusTagType = (status: number) => {
+  if (status === 1) return 'success'
+  if (status === 2) return 'danger'
+  return 'warning'
+}
+
+const getUploadStatusText = (status?: number) => {
+  if (status == null) return '-'
+  if (status === 0) return '待处理'
+  if (status === 1) return '成功'
+  if (status === 2) return '失败'
+  return '未知'
+}
+
+const getUploadStatusTagType = (status?: number) => {
+  if (status == null) return 'info'
   if (status === 1) return 'success'
   if (status === 2) return 'danger'
   return 'warning'
